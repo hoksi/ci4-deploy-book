@@ -1,0 +1,11 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: CodeIgniter4 배포와 운영 심화
+  structure:
+    - type: space
+      key: ci4-deploy-book
+      title: CodeIgniter4 배포와 운영 심화
+      path: book
+      default: true
+      content:
+        directory: ./
