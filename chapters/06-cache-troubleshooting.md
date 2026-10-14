@@ -40,16 +40,23 @@ php -i | grep opcache.revalidate_freq
 
 ```php
 <?php
-// _opcache_reset.php — 배포 후 한 번 열어주고 바로 삭제
+// opcache_reset.php — 배포 후 한 번 열어주고 바로 삭제
+$TOKEN = 'CHANGE_ME_TO_A_RANDOM_VALUE';   // 추측 불가능한 값으로 바꿀 것
+
+if (! hash_equals($TOKEN, $_GET['token'] ?? '')) {
+    http_response_code(403);
+    exit('Forbidden');
+}
+
 if (function_exists('opcache_reset')) {
     opcache_reset();
-    echo 'OPcache reset 완료';
+    echo 'OPcache reset 완료: ' . date('Y-m-d H:i:s');
 } else {
-    echo 'OPcache 사용 안 함';
+    echo 'OPcache 확장이 설치되어 있지 않습니다.';
 }
 ```
 
-**이 파일은 사용 후 반드시 삭제하세요** — 누구나 접근해서 서버의 OPcache를 계속 초기화시킬 수 있는 길을 열어두는 거라, 띄워두는 시간이 길어질수록 위험합니다.
+인증 없이 그냥 올려두면 **누구나 접근해서 서버의 OPcache를 계속 초기화시킬 수 있는 통로**가 됩니다. 토큰 체크를 반드시 넣고, **확인 즉시 서버에서 삭제하세요.** 전체 코드는 이 장 끝의 예제 폴더에 있습니다.
 
 ### 4단계: realpath 캐시를 의심한다
 
@@ -63,7 +70,27 @@ CI4의 `cache()` 서비스로 뷰나 쿼리 결과를 캐시해뒀다면, 코드
 php spark cache:clear
 ```
 
-php-cli가 막혀 있다면, 2단계에서 만든 것과 비슷하게 `cache()->clean()`을 호출하는 임시 스크립트를 하나 만들어 쓰고 지우면 됩니다.
+php-cli가 막혀 있다면, `cache()->clean()`을 호출하는 임시 스크립트를 만들어 쓰고 지우면 됩니다. CI4의 `CodeIgniter\Boot::bootWorker()`를 쓰면 라우팅/컨트롤러 디스패치 없이 **프레임워크 서비스(헬퍼 포함)만 가볍게 초기화**할 수 있습니다 — 원래 FrankenPHP 워커 모드를 위해 제공되는 메서드지만, 이런 1회성 스크립트에도 그대로 쓸 수 있습니다.
+
+```php
+<?php
+// cache_clear.php
+$TOKEN = 'CHANGE_ME_TO_A_RANDOM_VALUE';
+if (! hash_equals($TOKEN, $_GET['token'] ?? '')) {
+    http_response_code(403);
+    exit('Forbidden');
+}
+
+define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
+require FCPATH . '../app/Config/Paths.php';
+
+$paths = new Config\Paths();
+require $paths->systemDirectory . '/Boot.php';
+\CodeIgniter\Boot::bootWorker($paths);
+
+cache()->clean();
+echo 'CI4 캐시 초기화 완료: ' . date('Y-m-d H:i:s');
+```
 
 ### 6단계: 리버스 프록시/CDN 캐시를 의심한다
 
@@ -83,5 +110,9 @@ Nginx나 Cloudflare 같은 CDN을 앞에 뒀다면, 그쪽이 응답을 캐시�
 - [ ] 고친 파일이 실제로 서버에 배포됐는지 `md5sum`/`git log`로 확인했는가
 - [ ] OPcache, realpath 캐시, CI4 캐시, 리버스 프록시 캐시를 순서대로 배제했는가
 - [ ] 여기까지도 해결 안 됐다면 `.env`/설정값부터 다시 확인했는가
+
+## 전체 코드
+
+이 장에 나온 두 스크립트(`opcache_reset.php`, `cache_clear.php`)의 전체 원본은 [`examples/06-cache-troubleshooting/`](../examples/06-cache-troubleshooting/)에서 받아볼 수 있습니다. 로컬 CI4 프로젝트에 실제로 올려서 동작까지 확인한 코드입니다.
 
 2부를 여기서 마칩니다. 3부에서는 공유 호스팅의 제약을 벗어나, VPS/클라우드로 확장할 때 필요한 것들을 다룹니다.
