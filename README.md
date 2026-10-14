@@ -1,6 +1,6 @@
 # CodeIgniter4 배포와 운영 심화
 
-[1권 — CodeIgniter4로 만드는 AI 웹 서비스](https://github.com/hoksi/ci4-ai-book)의 13장(배포하기)을 한 권으로 확장한 책입니다. "일단 로컬에서 동작하게 만들기"는 끝났다는 전제로, **실제로 서비스를 올리고, 안정적으로 운영하는 법**만 다룹니다.
+[1권 — CodeIgniter4로 만드는 AI 웹 서비스](https://github.com/hoksi/ci4-ai-book) ([GitBook](https://holo-5.gitbook.io/holo-docs))의 13장(배포하기)을 한 권으로 확장한 책입니다. "일단 로컬에서 동작하게 만들기"는 끝났다는 전제로, **실제로 서비스를 올리고, 안정적으로 운영하는 법**만 다룹니다.
 
 저렴한 공유 호스팅의 제약(php-cli 차단, 고정된 문서 루트)부터 VPS/클라우드로 확장할 때 필요한 것(Docker, CI/CD, 모니터링)까지, 규모가 커지는 순서대로 다룹니다.
 

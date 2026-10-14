@@ -37,7 +37,7 @@ AWS, GCP, Fly.io 같은 곳에서 컨테이너(Docker) 단위로 배포합니다
 
 ## 이 책에서 배포할 대상
 
-[1권 — CodeIgniter4로 만드는 AI 웹 서비스](https://github.com/hoksi/ci4-ai-book)에서 만든 "AI 게시판"을 배포 대상으로 삼습니다. 1권을 안 읽었어도 상관없습니다 — 그냥 "게시글 CRUD + 외부 API(Groq) 호출이 있는 평범한 CI4 앱" 정도로 생각하면 이 책의 모든 내용을 그대로 따라갈 수 있습니다. 중요한 건 앱의 기능이 아니라, **그 앱을 어떻게 세상에 내놓고 운영하는가**입니다.
+[1권 — CodeIgniter4로 만드는 AI 웹 서비스](https://github.com/hoksi/ci4-ai-book) ([GitBook](https://holo-5.gitbook.io/holo-docs))에서 만든 "AI 게시판"을 배포 대상으로 삼습니다. 1권을 안 읽었어도 상관없습니다 — 그냥 "게시글 CRUD + 외부 API(Groq) 호출이 있는 평범한 CI4 앱" 정도로 생각하면 이 책의 모든 내용을 그대로 따라갈 수 있습니다. 중요한 건 앱의 기능이 아니라, **그 앱을 어떻게 세상에 내놓고 운영하는가**입니다.
 
 ## 체크리스트
 
